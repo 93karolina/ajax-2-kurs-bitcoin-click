@@ -3,57 +3,59 @@
 
 $( function() {
     console.log("Działa");
-} );
+});
 
 let buy = $(".buy");
 let sell = $(".sell");
 let btn = $(".btn");
 
-let beforeBuy = buy.text();
-let beforeSell = sell.text();
 
-$.getJSON(
-    "https://blockchain.info/pl/ticker",
-    function (data){
+btn.click( getCurrency);
+    
+function getCurrency() {
+     $.getJSON(
+        "https://blockchain.info/pl/ticker",
+        function (data){
+       
+        let beforeBuy = parseFloat(buy.html());
+        let beforeSell = parseFloat(sell.html());
 
-        let obj = data;
+        let afterBuy = data.PLN.buy;
+        let afterSell = data.PLN.sell;
+
+        buy.html(afterBuy);
+        sell.html(afterSell);
         
-        let objKey = Object.keys(obj);
-
-        let keyArray = objKey.map((key) => {
-
-            let objCurrency = {
-                currency: key,
-                buy: obj[key].buy,
-                sell: obj[key].sell
-            }      
-
-           
-            btn.click( function() {
-                buy.text(objCurrency.buy),
-                sell.text(objCurrency.sell);
-
-                console.log(objCurrency.currency);
-
-                let afterBuy = obj[key].buy;
-        
-                if (beforeBuy < afterBuy) {
-                    console.log("zwiekszylo sie");
-                    $(".arrow-buy").html(`<i class="fas fa-long-arrow-alt-up green" ></i>`)
+        if (beforeBuy < afterBuy) {
+        console.log("zwiekszylo sie");
+        $(".arrow-buy").html(`<i class="fas fa-long-arrow-alt-up green" ></i>`)
                     
-                } else if ( beforeBuy === afterBuy) {
-                    console.log("taki sam");
-                    $(".arrow-buy").html(`<i class=""fas fa-minus blue" ></i>`)
+        } else if ( beforeBuy === afterBuy) {
+        console.log("taki sam");
+        $(".arrow-buy").html(`<i class="fas fa-minus blue"></i>`)
 
-                } else {
-                    console.log("zmniejszylo");
-                    $(".arrow-buy").html(`<i class="fas fa-long-arrow-alt-down red"></i>`)
-                }
+        } else {
+        console.log("zmniejszylo się");
+        $(".arrow-buy").html(`<i class="fas fa-long-arrow-alt-down red"></i>`)
+        };
 
-                
-         })
-     });    
- })
+
+        if (beforeSell < afterSell) {
+         console.log("zwiekszylo sie");
+         $(".arrow-sell").html(`<i class="fas fa-long-arrow-alt-up green" ></i>`)
+                        
+        } else if ( beforeSell === afterSell) {
+        console.log("taki sam");
+        $(".arrow-sell").html(`<i class="fas fa-minus blue" ></i>`)
+    
+        } else {
+        console.log("zmniejszylo się");
+        $(".arrow-sell").html(`<i class="fas fa-long-arrow-alt-down red"></i>`)
+        };
+        
+    })
+}  
+
         
         
     
